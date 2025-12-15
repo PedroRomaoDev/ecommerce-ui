@@ -52,23 +52,6 @@ pnpm dev
 ```
 http://localhost:3000
 ```
-
-## Scripts Disponíveis
-
-- `pnpm dev` - Inicia o servidor de desenvolvimento
-- `pnpm build` - Gera a versão de produção
-- `pnpm start` - Inicia o servidor de produção
-- `pnpm lint` - Executa o linter para verificar o código
-
-## Componentes Principais
-
-- **ProductCard** - Cartão de produto com imagem, detalhes, seleção de tamanho/cor e botão de adicionar ao carrinho
-- **ProductList** - Lista de produtos disponíveis
-- **Navbar** - Barra de navegação principal
-- **SearchBar** - Barra de busca
-- **Categories** - Categorias de produtos
-- **Footer** - Rodapé da aplicação
-
 ## Tipo de Produto
 
 Os produtos seguem uma estrutura definida com os seguintes campos:
