@@ -1,12 +1,12 @@
 "use client";
 
 import {
+  Briefcase,
   Footprints,
   Glasses,
-  Briefcase,
+  Hand,
   Shirt,
   ShoppingBasket,
-  Hand,
   Venus,
 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
