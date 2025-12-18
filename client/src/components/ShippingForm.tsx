@@ -1,27 +1,35 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import { shippingFormSchema } from "@/forms/schemas/cart.schema";
 import { ShippingFormInputs } from "@/types";
 
-const ShippingForm = () => {
+const ShippingForm = ({
+  setShippingForm,
+}: {
+  setShippingForm: (data: ShippingFormInputs) => void;
+}) => {
   const router = useRouter();
   const {
     register,
-    //     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    handleSubmit,
+    formState: { errors, isSubmitting },
   } = useForm<ShippingFormInputs>({
     resolver: zodResolver(shippingFormSchema),
   });
 
-  const handleContinue = () => {
-    router.push("/cart?step=2", { scroll: false });
+  const handleShippingForm: SubmitHandler<ShippingFormInputs> = (data) => {
+    setShippingForm(data);
+    router.push("/cart?step=3", { scroll: false });
   };
 
   return (
-    <form className="flex flex-col gap-4">
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={handleSubmit(handleShippingForm)}
+    >
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className="text-xs font-medium text-gray-500">
           Name
@@ -103,8 +111,8 @@ const ShippingForm = () => {
       </div>
 
       <button
-        disabled={!isValid || isSubmitting}
-        onClick={handleContinue}
+        type="submit"
+        disabled={isSubmitting}
         className={`flex w-full items-center justify-center gap-2 rounded-lg p-2 text-white transition-all duration-300 ${
           isSubmitting
             ? "cursor-not-allowed bg-gray-800 opacity-60"
