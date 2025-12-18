@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -117,12 +118,53 @@ const CartPage = () => {
         {/* STEPS */}
         <div className="flex w-full flex-col gap-8 rounded-lg border-1 border-gray-100 p-8 shadow-lg lg:w-7/12">
           {activeStep === 1 ? (
-            "products"
+            cartItems.map((item) => (
+              // SINGLE CART ITEM
+              <div className="flex items-center justify-between" key={item.id}>
+                {/* IMAGE AND DETAILS */}
+                <div className="flex gap-8">
+                  {/* IMAGE */}
+                  <div className="relative h-32 w-32 overflow-hidden rounded-lg bg-gray-50">
+                    <Image
+                      src={item.images[item.selectedColor]}
+                      alt={item.name}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  {/* ITEM DETAILS */}
+                  <div className="flex flex-col justify-between">
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm font-medium">{item.name}</p>
+                      <p className="text-sm text-gray-500">
+                        Quantity: {item.quantity}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Size: {item.selectedSize.toUpperCase()}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Color: {item.selectedColor}
+                      </p>
+                    </div>
+                    <p className="font-medium">${item.price.toFixed(2)}</p>
+                  </div>
+                </div>
+
+                {/* DELETE BUTTON */}
+                <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-100 text-red-400 transition-all duration-300 hover:bg-red-200">
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
+            ))
           ) : activeStep === 2 ? (
             <ShippingForm />
           ) : activeStep === 3 && shippingForm ? (
             <PaymentForm />
-          ) : <p className="text-sm text-gray-500">Please fill in the shipping form to continue.</p>}
+          ) : (
+            <p className="text-sm text-gray-500">
+              Please fill in the shipping form to continue.
+            </p>
+          )}
         </div>
         {/* DETAILS */}
         <div className="flex w-full flex-col gap-8 rounded-lg border-1 border-gray-100 p-8 shadow-lg lg:w-5/12">
