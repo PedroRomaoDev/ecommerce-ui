@@ -9,7 +9,7 @@ import useCartStore from "@/app/stores/cartStore";
 // };
 
 const CartItemsList = () => {
-  const { cart } = useCartStore();
+  const { cart, removeFromCart } = useCartStore();
   return (
     <>
       {cart.map((item) => (
@@ -44,7 +44,10 @@ const CartItemsList = () => {
           </div>
 
           {/* DELETE BUTTON */}
-          <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-100 text-red-400 transition-all duration-300 hover:bg-red-200">
+          <button
+            onClick={() => removeFromCart(item)}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-100 text-red-400 transition-all duration-300 hover:bg-red-200"
+          >
             <Trash2 className="h-3 w-3" />
           </button>
         </div>
