@@ -5,9 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import useCartStore from "@/app/stores/cartStore";
 import { ProductType } from "@/types";
 
 const ProductCard = ({ product }: { product: ProductType }) => {
+  const { addToCart } = useCartStore();
+
   const [productTypes, setProductTypes] = useState({
     size: product.sizes[0],
     color: product.colors[0],
@@ -24,6 +27,15 @@ const ProductCard = ({ product }: { product: ProductType }) => {
       ...prev,
       [type]: value,
     }));
+  };
+
+  const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      quantity: 1,
+      selectedSize: productTypes.size,
+      selectedColor: productTypes.color,
+    });
   };
 
   return (
@@ -92,7 +104,10 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         {/* PRICE AND ADD TO CART BUTTON*/}
         <div className="flex items-center justify-between">
           <p className="font-medium">${product.price.toFixed(2)}</p>
-          <button className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 text-sm shadow-lg ring ring-gray-200 transition-all duration-300 hover:bg-black hover:text-white">
+          <button
+            onClick={handleAddToCart}
+            className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 text-sm shadow-lg ring ring-gray-200 transition-all duration-300 hover:bg-black hover:text-white"
+          >
             <ShoppingCart className="h-4 w-4" />
             Add to card
           </button>
