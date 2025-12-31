@@ -7,6 +7,7 @@ const useCartStore = create<CartStoreStateType & CardStoreActionsType>()(
   persist(
     (set) => ({
       cart: [],
+      hashHydrated: false,
       addToCart: (product) =>
         set((state) => {
           const existingIndex = state.cart.findIndex(
@@ -31,13 +32,25 @@ const useCartStore = create<CartStoreStateType & CardStoreActionsType>()(
         }),
       removeFromCart: (product) =>
         set((state) => ({
-          cart: state.cart.filter((p) => p.id !== product.id),
+          cart: state.cart.filter(
+            (p) =>
+              !(
+                p.id === product.id &&
+                p.selectedSize === product.selectedSize &&
+                p.selectedColor === product.selectedColor
+              ),
+          ),
         })),
       clearCart: () => set({ cart: [] }),
     }),
     {
       name: "cart",
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.hashHydrated = true;
+        }
+      },
     },
   ),
 );
