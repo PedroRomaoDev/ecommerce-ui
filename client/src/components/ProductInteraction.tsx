@@ -1,6 +1,6 @@
 "use client";
 
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -96,6 +96,15 @@ const ProductInteraction = ({
           </button>
         </div>
       </div>
+      {/* BUTTONS */}
+      <button className="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white shadow-lg">
+        <Plus className="h-4 w-4" />
+        Add to Cart
+      </button>
+      <button className="flex cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-gray-800 shadow-lg ring ring-gray-400">
+        <ShoppingCart className="h-4 w-4" />
+        Buy this item
+      </button>
     </div>
   );
 };
