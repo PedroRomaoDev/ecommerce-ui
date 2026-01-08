@@ -1,4 +1,4 @@
-# E-commerce UI
+# Bewear - Best Clothes UI
 
 Um projeto de interface de usuário para e-commerce desenvolvido com Next.js e React.
 
