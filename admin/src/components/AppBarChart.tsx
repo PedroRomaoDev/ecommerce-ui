@@ -11,30 +11,30 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  total: {
+    label: "Total",
     color: "var(--chart-1)",
   },
-  mobile: {
-    label: "Mobile",
+  successfull: {
+    label: "Successful",
     color: "var(--chart-4)",
   },
 } satisfies ChartConfig;
 
 const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
+  { month: "January", total: 186, successfull: 80 },
+  { month: "February", total: 305, successfull: 200 },
+  { month: "March", total: 237, successfull: 120 },
+  { month: "April", total: 173, successfull: 100 },
+  { month: "May", total: 209, successfull: 130 },
+  { month: "June", total: 214, successfull: 140 },
 ];
 
 const AppBarChart = () => {
   return (
     <div className="">
       <h1 className="mb-6 text-lg font-medium">Total Revenue</h1>
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+      <ChartContainer config={chartConfig} className="min-h-50 w-full">
         <BarChart accessibilityLayer data={chartData}>
           <CartesianGrid vertical={false} />
           <XAxis
@@ -47,8 +47,12 @@ const AppBarChart = () => {
           <YAxis tickLine={false} tickMargin={10} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
-          <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-          <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+          <Bar dataKey="total" fill="var(--color-total)" radius={4} />
+          <Bar
+            dataKey="successfull"
+            fill="var(--color-successfull)"
+            radius={4}
+          />
         </BarChart>
       </ChartContainer>
     </div>
