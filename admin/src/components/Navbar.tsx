@@ -14,19 +14,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { SidebarTrigger, useSidebar } from "./ui/sidebar";
+import { SidebarTrigger } from "./ui/sidebar";
 
 const Navbar = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { theme, setTheme } = useTheme();
-  const { toggleSidebar } = useSidebar();
+  //   const { toggleSidebar } = useSidebar();
   return (
     <nav className="bg-background sticky top-0 z-10 flex items-center justify-between p-4">
       {/* LEFT */}
       <SidebarTrigger />
-      <Button variant="outline" onClick={toggleSidebar}>
+      {/* <Button variant="outline" onClick={toggleSidebar}>
         Custom Button
-      </Button>
+      </Button> */}
       {/* RIGHT */}
       <div className="flex items-center gap-4">
         <Link href="/">Dashboard</Link>
