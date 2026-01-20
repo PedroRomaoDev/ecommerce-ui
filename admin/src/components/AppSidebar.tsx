@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import AddCategory from "./AddCategory";
 import AddOrder from "./AddOrder";
 import AddUser from "./AddUser";
 import EditUser from "./EditUser";
@@ -147,7 +148,7 @@ const AppSidebar = () => {
                         </Link>
                       </SidebarMenuButton>
                     </SheetTrigger>
-                    <EditUser />
+                    <AddCategory />
                   </Sheet>
                 </SidebarMenuButton>
               </SidebarMenuItem>
