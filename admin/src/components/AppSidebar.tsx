@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import AddOrder from "./AddOrder";
+import AddUser from "./AddUser";
 import EditUser from "./EditUser";
 import {
   DropdownMenu,
@@ -180,7 +181,7 @@ const AppSidebar = () => {
                         </Link>
                       </SidebarMenuButton>
                     </SheetTrigger>
-                    <EditUser />
+                    <AddUser />
                   </Sheet>
                 </SidebarMenuButton>
               </SidebarMenuItem>
