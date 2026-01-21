@@ -1,64 +1,139 @@
-# Bewear - Best Clothes UI
+# Bewear E-commerce
 
-Um projeto de interface de usuário para e-commerce desenvolvido com Next.js e React.
+Um projeto full-stack de e-commerce desenvolvido com Next.js, incluindo interface do cliente e painel administrativo.
 
 ## Descrição
 
-Este é um projeto de interface moderna para uma loja online (e-commerce). O projeto inclui componentes reutilizáveis para exibição de produtos, navegação, busca e layout geral da aplicação.
+Este é um monorepo contendo duas aplicações:
 
-## Tecnologias Utilizadas
+- **Client**: Interface da loja online para clientes
+- **Admin**: Painel administrativo para gerenciamento de produtos, usuários e pedidos
 
-- Next.js 15.4.5
-- React 19.1.0
-- TypeScript
-- Tailwind CSS 4
-- Lucide React (ícones)
+## 🚀 Tecnologias Utilizadas
 
-## Funcionalidades
+### Core
 
-- Lista de produtos com cards informativos
-- Exibição de nome, descrição, preços e imagens dos produtos
-- Seleção de tamanhos e cores
-- Barra de navegação e busca
-- Sistema de categorias
-- Layout responsivo
-- Footer com informações da loja
+- **Next.js** 15.3.0+ (App Router)
+- **React** 19.1.0
+- **TypeScript** 5.9.3
+- **pnpm** 10.20.0 (workspaces)
+
+### Styling
+
+- **Tailwind CSS** 4.1.18
+- **shadcn/ui** (componentes)
+- **Lucide React** (ícones)
+
+### Forms & Validation
+
+- **React Hook Form** 7.61.1
+- **Zod** 3.25.76
+- **@hookform/resolvers** 5.2.1
+
+### Data Visualization (Admin)
+
+- **Recharts** 2.15.4
+- **TanStack Table** 8.21.3
+
+### Dev Tools
+
+- **ESLint** 8.57.1
+- **Prettier** 3.6.2
+- **Husky** 9.1.7 (git hooks)
+- **lint-staged** 15.3.0
 
 ## Estrutura do Projeto
 
-O código principal está localizado na pasta `client/`:
-- `src/components/` - Componentes React reutilizáveis
-- `src/app/` - Páginas e rotas da aplicação
-- `src/types.ts` - Definições de tipos TypeScript
-
-## Como Executar
-
-1. Navegue até a pasta do cliente:
-```bash
-cd client
+```
+ecommerce-ui/
+├── client/                 # Aplicação do cliente
+│   ├── src/
+│   │   ├── app/           # Páginas (App Router)
+│   │   ├── components/    # Componentes React
+│   │   ├── constants/     # Constantes
+│   │   ├── forms/         # Schemas de validação
+│   │   └── types.ts       # Tipos TypeScript
+│   └── public/            # Assets estáticos
+│
+├── admin/                 # Painel administrativo
+│   ├── src/
+│   │   ├── app/           # Páginas e rotas
+│   │   │   ├── payments/  # Gestão de pagamentos
+│   │   │   ├── products/  # Gestão de produtos
+│   │   │   └── users/     # Gestão de usuários
+│   │   ├── components/    # Componentes React
+│   │   │   └── ui/        # Componentes shadcn/ui
+│   │   ├── hooks/         # Custom hooks
+│   │   └── lib/           # Utilitários
+│   └── public/            # Assets estáticos
+│
+└── .husky/                # Git hooks
 ```
 
-2. Instale as dependências:
+## Funcionalidades
+
+### Client
+
+- Catálogo de produtos com filtros
+- Visualização detalhada de produtos
+- Seleção de tamanhos e cores
+- Carrinho de compras (Zustand)
+- Sistema de checkout
+- Layout responsivo
+- Dark mode
+
+### Admin
+
+- Dashboard com gráficos e métricas
+- Gerenciamento de produtos (CRUD)
+- Gerenciamento de usuários
+- Visualização de pedidos/pagamentos
+- Data tables com paginação e ordenação
+- Sidebar colapsável com navegação
+- Formulários validados com React Hook Form + Zod
+- Dark mode
+
+## 🛠️ Como Executar
+
+### Pré-requisitos
+
+- Node.js 20+
+- pnpm 10+
+
+### Instalação
+
+1. Clone o repositório e instale as dependências:
+
 ```bash
 pnpm install
 ```
 
-3. Execute o servidor de desenvolvimento:
+### Executar Client
+
 ```bash
-pnpm dev
+cd client
+pnpm run dev
 ```
 
-4. Abra o navegador e acesse:
-```
-http://localhost:3000
-```
-## Tipo de Produto
+Acesse: http://localhost:3000
 
-Os produtos seguem uma estrutura definida com os seguintes campos:
-- ID único
-- Nome
-- Descrição curta e completa
-- Preço
-- Tamanhos disponíveis
-- Cores disponíveis
-- Imagens (uma para cada cor)
+### Executar Admin
+
+```bash
+cd admin
+pnpm run dev
+```
+
+Acesse: http://localhost:3000
+
+## Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'feat: adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+## Autor
+
+Desenvolvido como projeto de estudo de Next.js 15 e React 19.
