@@ -1,139 +1,135 @@
-# Bewear E-commerce
+# Turborepo starter
 
-Um projeto full-stack de e-commerce desenvolvido com Next.js, incluindo interface do cliente e painel administrativo.
+This Turborepo starter is maintained by the Turborepo core team.
 
-## Descrição
+## Using this example
 
-Este é um monorepo contendo duas aplicações:
+Run the following command:
 
-- **Client**: Interface da loja online para clientes
-- **Admin**: Painel administrativo para gerenciamento de produtos, usuários e pedidos
-
-## 🚀 Tecnologias Utilizadas
-
-### Core
-
-- **Next.js** 15.3.0+ (App Router)
-- **React** 19.1.0
-- **TypeScript** 5.9.3
-- **pnpm** 10.20.0 (workspaces)
-
-### Styling
-
-- **Tailwind CSS** 4.1.18
-- **shadcn/ui** (componentes)
-- **Lucide React** (ícones)
-
-### Forms & Validation
-
-- **React Hook Form** 7.61.1
-- **Zod** 3.25.76
-- **@hookform/resolvers** 5.2.1
-
-### Data Visualization (Admin)
-
-- **Recharts** 2.15.4
-- **TanStack Table** 8.21.3
-
-### Dev Tools
-
-- **ESLint** 8.57.1
-- **Prettier** 3.6.2
-- **Husky** 9.1.7 (git hooks)
-- **lint-staged** 15.3.0
-
-## Estrutura do Projeto
-
-```
-ecommerce-ui/
-├── client/                 # Aplicação do cliente
-│   ├── src/
-│   │   ├── app/           # Páginas (App Router)
-│   │   ├── components/    # Componentes React
-│   │   ├── constants/     # Constantes
-│   │   ├── forms/         # Schemas de validação
-│   │   └── types.ts       # Tipos TypeScript
-│   └── public/            # Assets estáticos
-│
-├── admin/                 # Painel administrativo
-│   ├── src/
-│   │   ├── app/           # Páginas e rotas
-│   │   │   ├── payments/  # Gestão de pagamentos
-│   │   │   ├── products/  # Gestão de produtos
-│   │   │   └── users/     # Gestão de usuários
-│   │   ├── components/    # Componentes React
-│   │   │   └── ui/        # Componentes shadcn/ui
-│   │   ├── hooks/         # Custom hooks
-│   │   └── lib/           # Utilitários
-│   └── public/            # Assets estáticos
-│
-└── .husky/                # Git hooks
+```sh
+npx create-turbo@latest
 ```
 
-## Funcionalidades
+## What's inside?
 
-### Client
+This Turborepo includes the following packages/apps:
 
-- Catálogo de produtos com filtros
-- Visualização detalhada de produtos
-- Seleção de tamanhos e cores
-- Carrinho de compras (Zustand)
-- Sistema de checkout
-- Layout responsivo
-- Dark mode
+### Apps and Packages
 
-### Admin
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-- Dashboard com gráficos e métricas
-- Gerenciamento de produtos (CRUD)
-- Gerenciamento de usuários
-- Visualização de pedidos/pagamentos
-- Data tables com paginação e ordenação
-- Sidebar colapsável com navegação
-- Formulários validados com React Hook Form + Zod
-- Dark mode
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-## 🛠️ Como Executar
+### Utilities
 
-### Pré-requisitos
+This Turborepo has some additional tools already setup for you:
 
-- Node.js 20+
-- pnpm 10+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
-### Instalação
+### Build
 
-1. Clone o repositório e instale as dependências:
+To build all apps and packages, run the following command:
 
-```bash
-pnpm install
+```
+cd my-turborepo
+
+# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+turbo build
+
+# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
+npx turbo build
+yarn dlx turbo build
+pnpm exec turbo build
 ```
 
-### Executar Client
+You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
 
-```bash
-cd client
-pnpm run dev
+```
+# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+turbo build --filter=docs
+
+# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
+npx turbo build --filter=docs
+yarn exec turbo build --filter=docs
+pnpm exec turbo build --filter=docs
 ```
 
-Acesse: http://localhost:3000
+### Develop
 
-### Executar Admin
+To develop all apps and packages, run the following command:
 
-```bash
-cd admin
-pnpm run dev
+```
+cd my-turborepo
+
+# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+turbo dev
+
+# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
+npx turbo dev
+yarn exec turbo dev
+pnpm exec turbo dev
 ```
 
-Acesse: http://localhost:3000
+You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
 
-## Contribuindo
+```
+# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+turbo dev --filter=web
 
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'feat: adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
+# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
+npx turbo dev --filter=web
+yarn exec turbo dev --filter=web
+pnpm exec turbo dev --filter=web
+```
 
-## Autor
+### Remote Caching
 
-Desenvolvido como projeto de estudo de Next.js 15 e React 19.
+> [!TIP]
+> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+
+Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+
+```
+cd my-turborepo
+
+# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+turbo login
+
+# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
+npx turbo login
+yarn exec turbo login
+pnpm exec turbo login
+```
+
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+
+```
+# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+turbo link
+
+# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
+npx turbo link
+yarn exec turbo link
+pnpm exec turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
+- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
+- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
+- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
+- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
+- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)

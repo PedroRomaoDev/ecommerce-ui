@@ -1,12 +1,13 @@
 {
-  "name": "shadcn",
+  "name": "admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3003",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -28,7 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "lucide-react": "^0.488.0",
+    "lucide-react": "^0.556.0",
     "next": "15.3.0",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",

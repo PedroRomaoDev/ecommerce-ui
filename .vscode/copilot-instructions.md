@@ -1,8 +1,30 @@
-# Copilot Instructions - E-commerce UI
+# Copilot Instructions - E-commerce Microservices
 
-Você é um engenheiro de software sênior especializado no desenvolvimento web moderno, com profundo conhecimento em Next.js, React, TypeScript, Tailwind CSS e Zustand. Você é atencioso, preciso e focado em entregar soluções de alta qualidade e fáceis de manter.
+Você é um engenheiro de software sênior especializado em arquitetura de microserviços, backend escalável e frontend moderno. Você é atencioso, preciso e focado em entregar soluções de alta qualidade, escaláveis e fáceis de manter.
+
+## Visão Geral do Projeto
+
+Este é um projeto de e-commerce baseado em **arquitetura de microserviços** com:
+
+- **Backend**: Microserviços independentes com Node.js/NestJS
+- **Banco de Dados**: PostgreSQL para persistência
+- **Mensageria**: Apache Kafka para comunicação assíncrona entre serviços
+- **Frontend**: Next.js 15 com App Router
+- **Monorepo**: Gerenciado com Turborepo e pnpm workspaces
 
 ## Stack Técnica
+
+### Backend (Microserviços)
+
+- **Framework**: Node.js com NestJS (ou Express quando apropriado)
+- **Linguagem**: TypeScript 5.8+ (strict mode)
+- **Banco de Dados**: PostgreSQL 16+
+- **ORM**: Prisma (ou TypeORM)
+- **Mensageria**: Apache Kafka
+- **Validação**: Class-validator + Class-transformer (NestJS) ou Zod
+- **Containerização**: Docker + Docker Compose
+
+### Frontend
 
 - **Framework**: Next.js 15.4.5 com App Router
 - **Runtime**: React 19.1.0
@@ -11,7 +33,49 @@ Você é um engenheiro de software sênior especializado no desenvolvimento web 
 - **Gerenciador**: pnpm (usar `pnpm add` ao invés de npm/yarn)
 - **Linter**: ESLint 8.57.1 (não usar configuração flat config do v9)
 
-## Gerenciamento de Estado
+## Arquitetura de Microserviços
+
+### Princípios Fundamentais
+
+- **Single Responsibility**: Cada microserviço deve ter uma responsabilidade única e bem definida
+- **Autonomia**: Cada serviço deve ser independente, com seu próprio banco de dados
+- **Comunicação Assíncrona**: Preferir Kafka para eventos entre serviços
+- **API Gateway**: Para roteamento e agregação de chamadas aos microserviços
+- **Resiliência**: Implementar circuit breakers, retries e timeouts
+
+### Estrutura de Microserviços
+
+```
+apps/
+  services/
+    auth-service/          # Autenticação e autorização
+    product-service/       # Catálogo de produtos
+    cart-service/          # Carrinho de compras
+    order-service/         # Processamento de pedidos
+    payment-service/       # Gateway de pagamento
+    notification-service/  # E-mails e notificações
+    inventory-service/     # Controle de estoque
+  api-gateway/             # Gateway de API
+  web/                     # Frontend Next.js
+  admin/                   # Painel administrativo
+```
+
+### Kafka - Padrões de Mensageria
+
+- **Eventos de Domínio**: `product.created`, `order.placed`, `payment.completed`
+- **Command Pattern**: Para operações que requerem resposta
+- **Event Sourcing**: Considerar para histórico de pedidos
+- **Dead Letter Queue**: Para mensagens com falha
+
+### PostgreSQL - Boas Práticas
+
+- Cada microserviço possui seu próprio schema/database
+- Usar migrations (Prisma Migrate ou TypeORM migrations)
+- Indexes apropriados para queries frequentes
+- Transações para operações críticas
+- Connection pooling configurado
+
+## Gerenciamento de Estado (Frontend)
 
 - **Zustand** para estado global com middleware `persist` para localStorage
 - Hooks de store devem incluir flag `hashHydrated` para prevenir hydration mismatch
@@ -74,10 +138,64 @@ Você é um engenheiro de software sênior especializado no desenvolvimento web 
 - Loading states e error boundaries quando apropriado
 - Acessibilidade: usar elementos semânticos e atributos ARIA quando necessário
 
-## Monorepo
+## Monorepo e Workspaces
 
-- Workspace configurado para `client` e `admin` packages
+- Turborepo para build caching e task orchestration
+- pnpm workspaces para gerenciamento de dependências
 - Usar `pnpm -F <package>` para comandos específicos de workspace
+- Shared packages para código comum entre serviços:
+  - `@repo/types`: Tipos TypeScript compartilhados
+  - `@repo/utils`: Utilitários comuns
+  - `@repo/kafka`: Cliente Kafka configurado
+  - `@repo/database`: Clientes de banco compartilhados
+
+## Backend - Convenções NestJS
+
+- **Modules**: Organizar por domínio (`ProductModule`, `OrderModule`)
+- **Controllers**: Endpoints REST (`@Controller('products')`)
+- **Services**: Lógica de negócio
+- **Repositories**: Acesso a dados (Prisma/TypeORM)
+- **DTOs**: Data Transfer Objects com validação
+- **Guards**: Para autenticação/autorização
+- **Interceptors**: Para transformação de resposta, logging
+- **Pipes**: Para validação e transformação de entrada
+
+### Exemplo de Estrutura de Serviço
+
+```
+product-service/
+  src/
+    products/
+      dto/
+        create-product.dto.ts
+        update-product.dto.ts
+      entities/
+        product.entity.ts
+      products.controller.ts
+      products.service.ts
+      products.module.ts
+    kafka/
+      kafka.module.ts
+      producers/
+      consumers/
+    database/
+      prisma.service.ts
+    main.ts
+  prisma/
+    schema.prisma
+    migrations/
+```
+
+## API Design
+
+- **REST**: Para operações CRUD síncronas
+- **GraphQL**: Considerar para queries complexas (futuro)
+- **WebSockets**: Para atualizações em tempo real (status de pedido)
+- Versionamento de API: `/api/v1/products`
+- Paginação: usar cursor-based ou offset/limit
+- Filtros e ordenação em query params
+
+## Monorepo
 
 ## Validação com Zod
 
@@ -96,25 +214,35 @@ const productSchema = z.object({
 type ProductInput = z.infer<typeof productSchema>;
 ```
 
-## Testes (quando implementados)
+## Testes
 
-- **Vitest** será usado para testes unitários e de integração
+- **Vitest** para frontend (testes unitários e de integração)
+- **Jest** para backend (testes unitários, integração e E2E)
 - **SEMPRE** criar uma função `makeSut` (System Under Test) que instancia o objeto testado
 - **SEMPRE** testar todos os cenários possíveis (sucesso, falhas, edge cases)
-- Exemplo de estrutura:
+- **Backend**: Testar controllers, services, repositories
+- **Integração**: Testar comunicação com Kafka e PostgreSQL usando containers de teste
+
+Exemplo de estrutura:
 
 ```typescript
-describe("ProductCard", () => {
+describe("ProductService", () => {
   const makeSut = () => {
-    const props = {
-      /* mock props */
-    };
-    return { sut: <ProductCard {...props} />, props };
+    const repository = new MockProductRepository();
+    const kafkaProducer = new MockKafkaProducer();
+    const sut = new ProductService(repository, kafkaProducer);
+    return { sut, repository, kafkaProducer };
   };
 
-  it("should render product name", () => {
-    const { sut } = makeSut();
-    // assertions
+  it("should create product and publish event", async () => {
+    const { sut, kafkaProducer } = makeSut();
+    const product = await sut.create({ name: "Test" });
+
+    expect(product).toBeDefined();
+    expect(kafkaProducer.publish).toHaveBeenCalledWith(
+      "product.created",
+      expect.any(Object),
+    );
   });
 });
 ```
@@ -130,7 +258,7 @@ describe("ProductCard", () => {
 
 - **SEMPRE** use Conventional Commits para mensagens de commit
 - **SEMPRE** escreva mensagens em inglês
-- Formato: `<type>: <description>`
+- Formato: `<type>(<scope>): <description>`
 - **SEMPRE** leia os arquivos em staged (git staged files) antes de sugerir uma mensagem de commit para entender o contexto das mudanças
 
 ### Tipos de Commit
@@ -143,18 +271,32 @@ describe("ProductCard", () => {
 - **docs**: alterações em documentação
 - **test**: adição ou correção de testes
 - **perf**: melhorias de performance
+- **build**: mudanças no sistema de build ou dependências externas
+- **ci**: mudanças em arquivos de configuração CI
+
+### Scopes Comuns
+
+- **frontend**: web, admin
+- **backend**: auth, product, cart, order, payment, notification, inventory
+- **infra**: docker, kafka, postgres, api-gateway
+- **shared**: types, utils, config
 
 ### Exemplos
 
 ```bash
-feat: add product detail page
-fix: resolve hydration mismatch in cart icon
-refactor: extract CartSummary component from cart page
-style: replace arbitrary Tailwind classes with standard ones
-chore: downgrade ESLint to v8 for Next.js compatibility
-docs: update README with setup instructions
-test: add unit tests for useCartStore hook
-perf: optimize product images with next/image
+feat(product): add product detail page
+feat(auth): implement JWT authentication service
+fix(cart): resolve hydration mismatch in cart icon
+fix(order): handle duplicate order placement
+refactor(payment): extract PaymentProcessor class
+style(web): replace arbitrary Tailwind classes with standard ones
+chore(kafka): add kafka consumer configuration
+chore: upgrade dependencies to latest versions
+docs(api): update API documentation for product endpoints
+test(order): add unit tests for OrderService
+perf(product): optimize product image loading
+build(docker): add docker-compose for local development
+ci: add GitHub Actions workflow for tests
 ```
 
 ### Boas Práticas
@@ -164,3 +306,24 @@ perf: optimize product images with next/image
 - Não terminar com ponto final
 - Limitar a primeira linha a ~72 caracteres
 - Se necessário, adicionar corpo explicativo após linha em branco
+- Scope é opcional mas recomendado para clareza
+
+## Segurança
+
+- **NUNCA** commitar secrets, API keys ou credenciais
+- Usar variáveis de ambiente (.env) e .gitignore apropriado
+- JWT com refresh tokens para autenticação
+- Rate limiting em APIs públicas
+- Validação rigorosa de entrada em todos os endpoints
+- CORS configurado apropriadamente
+- Sanitização de dados antes de persistir
+
+## Performance e Escalabilidade
+
+- **Caching**: Redis para cache de dados frequentes
+- **Database Indexing**: Indexes em colunas de busca/filtro
+- **Lazy Loading**: Carregar dados sob demanda
+- **Pagination**: Sempre paginar listas grandes
+- **Kafka Partitioning**: Particionar tópicos por chave para paralelismo
+- **Connection Pooling**: Configurar pools de conexão adequados
+- **Horizontal Scaling**: Microserviços devem ser stateless para fácil escalonamento
