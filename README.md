@@ -1,135 +1,240 @@
-# Turborepo starter
+# BeWear E-commerce
 
-This Turborepo starter is maintained by the Turborepo core team.
+Solução enterprise de e-commerce construída sobre arquitetura orientada a microserviços (MSA) com gerenciamento de monorepo via Turborepo. O sistema implementa separação de concerns através de aplicações Next.js 15 (App Router) servindo interfaces distintas para consumidores finais e administradores, enquanto o backend opera como um ecossistema distribuído de serviços independentes e autônomos.
 
-## Using this example
+A comunicação inter-serviços utiliza um modelo híbrido: requisições síncronas via RESTful APIs para operações de leitura e comandos de resposta imediata, combinadas com mensageria assíncrona através de Apache Kafka para event-driven architecture, garantindo desacoplamento temporal, tolerância a falhas e processamento eventual consistency.
 
-Run the following command:
+A infraestrutura de build emprega Turborepo com pipelines incrementais e caching distribuído, permitindo compilações paralelas, hot module replacement cross-workspace e deployments independentes por serviço. O gerenciamento de dependências via PNPM Workspaces otimiza o consumo de disco através de content-addressable storage e hoisting seletivo de pacotes compartilhados.
 
-```sh
-npx create-turbo@latest
-```
+Desenvolvida com TypeScript end-to-end, a aplicação garante type safety desde a camada de apresentação até os contratos de API, utilizando schemas compartilhados via packages internos do monorepo e validação em runtime com Zod.
 
-## What's inside?
+## Índice
 
-This Turborepo includes the following packages/apps:
+- [Visão Geral](#visão-geral)
+- [Arquitetura](#arquitetura)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Tecnologias](#tecnologias)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação](#instalação)
+- [Desenvolvimento](#desenvolvimento)
+- [Build](#build)
+- [Aplicações](#aplicações)
+- [Microserviços](#microserviços)
+- [Comunicação](#comunicação)
+- [Contribuição](#contribuição)
 
-### Apps and Packages
+## Visão Geral
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+BeWear é uma plataforma completa de e-commerce desenvolvida com foco em escalabilidade e manutenibilidade. O projeto utiliza uma arquitetura de microserviços organizada em monorepo, permitindo desenvolvimento independente de cada serviço enquanto mantém o código centralizado.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Principais Características
 
-### Utilities
+- Arquitetura de microserviços desacoplada
+- Frontend responsivo para cliente e administração
+- Comunicação assíncrona via Apache Kafka
+- APIs REST para operações síncronas
+- Sistema de cache distribuído
+- Gerenciamento centralizado com Turborepo
+- Pipelines de build otimizadas
 
-This Turborepo has some additional tools already setup for you:
+## Arquitetura
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+O sistema é dividido em camadas bem definidas:
 
-### Build
+### Frontend Layer
 
-To build all apps and packages, run the following command:
+- **Client Application**: Interface do consumidor final
+- **Admin Application**: Painel administrativo completo
 
-```
-cd my-turborepo
+### Backend Layer
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+- Microserviços independentes e especializados
+- Event-driven architecture com Kafka
+- APIs REST para comunicação síncrona
+- Persistência de dados distribuída
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+### Infrastructure Layer
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+- Turborepo para gerenciamento do monorepo
+- PNPM para gerenciamento de dependências
+- Sistema de build incremental com cache
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
+## Estrutura do Projeto
 
 ```
-cd my-turborepo
+bewear-ui/
+├── apps/
+│   ├── admin/          # Aplicação administrativa
+│   ├── client/         # Aplicação do cliente
+│   ├── docs/           # Documentação
+│   └── web/            # Landing page
+├── packages/
+│   ├── ui/             # Componentes compartilhados
+│   ├── config/         # Configurações compartilhadas
+│   └── types/          # Tipos TypeScript compartilhados
+├── services/           # Microserviços backend
+│   ├── products/       # Serviço de produtos
+│   ├── users/          # Serviço de usuários
+│   ├── orders/         # Serviço de pedidos
+│   └── payments/       # Serviço de pagamentos
+└── turbo.json         # Configuração do Turborepo
+```
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
+## Tecnologias
+
+### Frontend
+
+- [Next.js 15](https://nextjs.org/) - Framework React
+- [TypeScript](https://www.typescriptlang.org/) - Tipagem estática
+- [Tailwind CSS](https://tailwindcss.com/) - Estilização
+- [shadcn/ui](https://ui.shadcn.com/) - Componentes UI
+
+### Backend
+
+- [Node.js](https://nodejs.org/) - Runtime
+- [Express](https://expressjs.com/) - Framework web
+- [Apache Kafka](https://kafka.apache.org/) - Message broker
+- [PostgreSQL](https://www.postgresql.org/) - Banco de dados
+
+### DevOps
+
+- [Turborepo](https://turbo.build/) - Build system
+- [PNPM](https://pnpm.io/) - Package manager
+- [Docker](https://www.docker.com/) - Containerização
+
+## Pré-requisitos
+
+Certifique-se de ter instalado:
+
+- Node.js 18+
+- PNPM 8+
+- Docker e Docker Compose
+- Apache Kafka (via Docker)
+
+## Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/bewear-ui.git
+
+# Entre no diretório
+cd bewear-ui
+
+# Instale as dependências
+pnpm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+```
+
+## Desenvolvimento
+
+### Iniciar todos os serviços
+
+```bash
 turbo dev
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+### Iniciar aplicação específica
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+```bash
+# Admin
+turbo dev --filter=admin
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+# Client
+turbo dev --filter=client
 ```
 
-### Remote Caching
+### Iniciar microserviço específico
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```bash
+turbo dev --filter=@services/products
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Build
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### Build de produção completo
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+turbo build
 ```
 
-## Useful Links
+### Build de aplicação específica
 
-Learn more about the power of Turborepo:
+```bash
+turbo build --filter=admin
+```
 
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+### Build com cache
+
+O Turborepo automaticamente cacheia builds anteriores, acelerando builds subsequentes.
+
+## Aplicações
+
+### Admin
+
+Painel administrativo completo para gerenciamento da plataforma.
+
+- **URL de desenvolvimento**: http://localhost:3001
+- **Funcionalidades**: Gestão de produtos, usuários, pedidos e pagamentos
+
+### Client
+
+Interface do usuário final para navegação e compra de produtos.
+
+- **URL de desenvolvimento**: http://localhost:3000
+- **Funcionalidades**: Catálogo, carrinho, checkout e acompanhamento de pedidos
+
+## Microserviços
+
+### Products Service
+
+Gerenciamento do catálogo de produtos, categorias e estoque.
+
+### Users Service
+
+Autenticação, autorização e gerenciamento de perfis de usuários.
+
+### Orders Service
+
+Processamento e acompanhamento de pedidos.
+
+### Payments Service
+
+Integração com gateways de pagamento e processamento de transações.
+
+## Comunicação
+
+### REST APIs
+
+Comunicação síncrona entre frontend e backend para operações CRUD e consultas.
+
+### Apache Kafka
+
+Eventos assíncronos para operações que não requerem resposta imediata:
+
+- Criação de pedidos
+- Processamento de pagamentos
+- Atualizações de estoque
+- Notificações
+
+## Contribuição
+
+Contribuições são bem-vindas! Por favor, siga estas diretrizes:
+
+1. Faça fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'feat: adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+### Padrões de Commit
+
+Seguimos o padrão [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` Nova funcionalidade
+- `fix:` Correção de bug
+- `docs:` Documentação
+- `chore:` Manutenção
+- `refactor:` Refatoração de código
+- `test:` Testes
